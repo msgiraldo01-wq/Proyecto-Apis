@@ -11,8 +11,27 @@ const cors    = require('cors');
 const app  = express();
 const PORT = 3000;
 
-// ── URL base de la API pública ──
+// ── Países disponibles en DolarApi ──
+const PAISES = [
+  { id: 'argentina', nombre: 'Argentina', baseUrl: 'https://dolarapi.com'    },
+  { id: 'colombia',  nombre: 'Colombia',  baseUrl: 'https://co.dolarapi.com' },
+  { id: 'chile',     nombre: 'Chile',     baseUrl: 'https://cl.dolarapi.com' },
+  { id: 'venezuela', nombre: 'Venezuela', baseUrl: 'https://ve.dolarapi.com' },
+  { id: 'uruguay',   nombre: 'Uruguay',   baseUrl: 'https://uy.dolarapi.com' },
+  { id: 'mexico',    nombre: 'México',    baseUrl: 'https://mx.dolarapi.com' },
+  { id: 'bolivia',   nombre: 'Bolivia',   baseUrl: 'https://bo.dolarapi.com' },
+  { id: 'brasil',    nombre: 'Brasil',    baseUrl: 'https://br.dolarapi.com' },
+];
+
+// Colombia por defecto para no romper las rutas existentes
 const DOLAR_API = 'https://co.dolarapi.com';
+
+// ── Helper: obtener baseUrl según ?pais= (defecto Colombia) ──
+function getBaseUrl(req) {
+  const paisId = req.query.pais?.toLowerCase();
+  const pais   = PAISES.find(p => p.id === paisId);
+  return pais ? pais.baseUrl : DOLAR_API;
+}
 
 // ── Middleware ──
 app.use(cors());
@@ -50,7 +69,6 @@ async function guardarCotizacion(data, endpoint, status) {
     return;
   }
 
-  // La TRM tiene estructura diferente — la normalizamos
   const esTRM = endpoint.includes('/trm');
 const registro = esTRM ? {
   moneda:             'TRM',
@@ -87,17 +105,26 @@ async function guardarError(endpoint, status, mensaje) {
 }
 
 // ═══════════════════════════════════════════════════════
+//  RUTA — Lista de países para el selector del frontend
+// ═══════════════════════════════════════════════════════
+
+app.get('/api/paises', (req, res) => {
+  res.json(PAISES.map(p => ({ id: p.id, nombre: p.nombre })));
+});
+
+// ═══════════════════════════════════════════════════════
 //  RUTAS — Proxy a DolarApi + guardado en MySQL
 // ═══════════════════════════════════════════════════════
 
 // ── Todas las divisas ──
 app.get('/api/cotizaciones', async (req, res) => {
   const endpoint = '/v1/cotizaciones';
+  const baseUrl  = getBaseUrl(req);             // ← usa ?pais= si viene
   try {
-    const resp = await fetch(DOLAR_API + endpoint);
+    const resp = await fetch(baseUrl + endpoint);
     const data = await resp.json();
     await guardarCotizacion(data, endpoint, resp.status);
-    console.log(`📥 [${resp.status}] ${endpoint} — ${data.length} divisas guardadas`);
+    console.log(`📥 [${resp.status}] ${baseUrl} ${endpoint} — ${data.length} divisas guardadas`);
     res.status(resp.status).json(data);
   } catch (err) {
     await guardarError(endpoint, 500, err.message);
@@ -108,12 +135,12 @@ app.get('/api/cotizaciones', async (req, res) => {
 // ── Divisa específica ──
 app.get('/api/cotizaciones/:moneda', async (req, res) => {
   const { moneda } = req.params;
+  const baseUrl    = getBaseUrl(req);           // ← usa ?pais= si viene
 
-  // Mapa frontend → códigos ISO reales de la API
   const mapaEndpoints = {
     dolar: { path: '/v1/cotizaciones/usd' },
     euro:  { path: '/v1/cotizaciones/eur' },
-    trm:   { path: '/v1/trm'              },  // ruta especial
+    trm:   { path: '/v1/trm'              },
     ars:   { path: '/v1/cotizaciones/ars' },
     clp:   { path: '/v1/cotizaciones/clp' },
     mxn:   { path: '/v1/cotizaciones/mxn' },
@@ -135,12 +162,12 @@ app.get('/api/cotizaciones/:moneda', async (req, res) => {
   const endpoint = config.path;
 
   try {
-    const resp = await fetch(DOLAR_API + endpoint);
+    const resp = await fetch(baseUrl + endpoint);
 
     if (!resp.ok) {
       const msg = `HTTP ${resp.status} al consultar ${endpoint}`;
       await guardarError(endpoint, resp.status, msg);
-      return res.status(resp.status).json({ error: 'Error de la API', status: resp.status, endpoint });
+      return res.status(resp.status).json({ error: 'Moneda no disponible en este país', status: resp.status, message: `La moneda '${moneda}' no está disponible para '${req.query.pais || 'colombia'}'. No todos los países tienen las mismas divisas.`, endpoint });
     }
 
     const data = await resp.json();
@@ -240,14 +267,14 @@ conectarDB().then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     console.log(`📡 Endpoints disponibles:`);
-    console.log(`   GET /api/cotizaciones`);
-    console.log(`   GET /api/cotizaciones/:moneda`);
+    console.log(`   GET /api/paises`);
+    console.log(`   GET /api/cotizaciones?pais=chile`);
+    console.log(`   GET /api/cotizaciones/:moneda?pais=chile`);
     console.log(`   GET /api/historial`);
     console.log(`   GET /api/historial/:moneda`);
     console.log(`   GET /api/ultimas`);
     console.log(`   GET /api/errores`);
     console.log(`   GET /api/stats`);
-    console.log(`   GET /api/demo/error/:code`);
     console.log(`   GET /api/demo/error/:code`);
   });
 });

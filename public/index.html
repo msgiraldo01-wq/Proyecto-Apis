@@ -16,8 +16,6 @@
       --mono: 'JetBrains Mono', monospace; --sans: 'Syne', sans-serif;
     }
     body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
-
-    /* ── Header ── */
     header {
       border-bottom: 1px solid var(--border); padding: 1rem 2rem;
       display: flex; align-items: center; justify-content: space-between;
@@ -32,11 +30,17 @@
     .server-status { font-family: var(--mono); font-size: 0.72rem; display: flex; align-items: center; gap: 6px; }
     .ss-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
     .ss-dot.online { background: var(--green); box-shadow: 0 0 6px var(--green); }
-
-    /* ── Layout ── */
+    .pais-selector { display: flex; align-items: center; gap: 8px; }
+    .pais-selector label { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+    .pais-select {
+      height: 32px; padding: 0 10px;
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 8px; color: var(--text);
+      font-family: var(--mono); font-size: 0.75rem;
+      cursor: pointer; outline: none; transition: border-color 0.15s;
+    }
+    .pais-select:focus { border-color: var(--accent); }
     .layout { display: grid; grid-template-columns: 250px 1fr; min-height: calc(100vh - 58px); }
-
-    /* ── Sidebar ── */
     aside {
       border-right: 1px solid var(--border); padding: 1.25rem 0.75rem;
       position: sticky; top: 58px; height: calc(100vh - 58px); overflow-y: auto;
@@ -58,16 +62,11 @@
     .mb { font-size: 0.58rem; font-weight: 600; font-family: var(--mono); border-radius: 4px; padding: 2px 5px; flex-shrink: 0; }
     .mb-get { background: rgba(34,197,94,0.15); color: var(--green); }
     .mb-db  { background: rgba(245,158,11,0.15); color: var(--amber); }
-
-    /* ── Main ── */
     main { padding: 1.75rem 2rem; overflow-y: auto; }
     .page { display: none; }
     .page.active { display: block; }
-
     .pg-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.3rem; }
     .pg-sub { font-size: 0.8rem; color: var(--muted); font-family: var(--mono); margin-bottom: 1.5rem; }
-
-    /* ── URL bar ── */
     .url-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 1rem; }
     .get-pill { background: rgba(34,197,94,0.12); color: var(--green); border-radius: 6px; font-family: var(--mono); font-size: 0.72rem; font-weight: 600; padding: 0 10px; height: 40px; display: flex; align-items: center; flex-shrink: 0; }
     .url-input { flex: 1; height: 40px; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: var(--mono); font-size: 0.77rem; padding: 0 1rem; outline: none; transition: border-color 0.15s; }
@@ -75,8 +74,6 @@
     .btn-send { height: 40px; padding: 0 1.1rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-family: var(--sans); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
     .btn-send:hover { background: #2563eb; }
     .btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    /* ── Status strip ── */
     .status-strip { display: flex; align-items: center; gap: 10px; padding: 0.55rem 0.9rem; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 1rem; font-family: var(--mono); font-size: 0.77rem; flex-wrap: wrap; }
     .sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .sdot-ok   { background: var(--green); box-shadow: 0 0 5px var(--green); }
@@ -88,27 +85,19 @@
     .sc-err  { color: var(--red);   font-weight: 600; }
     .s-time { color: var(--muted); margin-left: auto; }
     .s-saved { color: var(--green); font-size: 0.7rem; }
-
-    /* ── Tabs ── */
     .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
     .tab { padding: 0.45rem 0.9rem; font-size: 0.78rem; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; }
     .tab:hover { color: var(--text); }
     .tab.active { color: var(--accent2); border-bottom-color: var(--accent); }
-
-    /* ── Code panel ── */
     .code-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem; overflow: auto; min-height: 180px; max-height: 420px; }
     pre { font-family: var(--mono); font-size: 0.76rem; line-height: 1.7; white-space: pre-wrap; word-break: break-all; }
     .jk { color: #93c5fd; } .jvs { color: #86efac; } .jvn { color: #fcd34d; }
     .jvb { color: #f9a8d4; } .c-err { color: var(--red); } .c-mut { color: var(--muted); }
-
-    /* ── Metric cards ── */
     .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 1.5rem; }
     .mc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem 0.9rem; }
     .mc-label { font-size: 0.68rem; color: var(--muted); font-family: var(--mono); margin-bottom: 4px; }
     .mc-val { font-size: 1.1rem; font-weight: 800; }
     .mc-sub { font-size: 0.67rem; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
-
-    /* ── Table ── */
     .tbl-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
     table { width: 100%; border-collapse: collapse; font-size: 0.78rem; font-family: var(--mono); }
     thead th { background: var(--surface2); color: var(--muted); padding: 0.6rem 0.9rem; text-align: left; font-weight: 600; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
@@ -119,24 +108,17 @@
     .pill-ok { background: rgba(34,197,94,0.12); color: var(--green); }
     .pill-err { background: rgba(239,68,68,0.12); color: var(--red); }
     .pill-warn { background: rgba(245,158,11,0.12); color: var(--amber); }
-
-    /* ── Errors grid ── */
     .err-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 1.5rem; }
     .err-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
     .err-card:hover { border-color: var(--border2); background: var(--surface2); }
     .err-num { font-size: 1.5rem; font-weight: 800; font-family: var(--mono); margin-bottom: 2px; }
     .en-4 { color: var(--amber); } .en-5 { color: var(--red); }
     .err-label { font-size: 0.75rem; color: var(--muted); }
-
-    /* ── Spinner ── */
     @keyframes spin { to { transform: rotate(360deg); } }
     .spin { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 5px; }
-
     hr { border: none; border-top: 1px solid var(--border); margin: 1.75rem 0; }
-
     .btn-refresh { height: 36px; padding: 0 1rem; background: transparent; border: 1px solid var(--border2); border-radius: 8px; color: var(--muted); font-family: var(--sans); font-size: 0.8rem; cursor: pointer; transition: all 0.15s; margin-bottom: 1rem; }
     .btn-refresh:hover { color: var(--text); border-color: var(--accent); }
-
     @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } aside { display: none; } }
   </style>
 </head>
@@ -148,6 +130,12 @@
     <div class="hstat">consultas: <span id="hTotal">—</span></div>
     <div class="hstat">errores: <span id="hErrors">—</span></div>
     <div class="hstat">monedas: <span id="hMonedas">—</span></div>
+  </div>
+  <div class="pais-selector">
+    <label for="paisSelect">🌎 País:</label>
+    <select class="pais-select" id="paisSelect" onchange="onPaisChange()">
+      <option value="">Cargando países…</option>
+    </select>
   </div>
   <div class="server-status">
     <span class="ss-dot" id="ssDot"></span>
@@ -185,7 +173,6 @@
     <button class="ep-btn" onclick="goPage('pen', this)">
       <span class="mb mb-get">GET</span> Sol Peruano
     </button>
-
     <p class="sidebar-label">Base de datos</p>
     <button class="ep-btn" onclick="goPage('historial', this)">
       <span class="mb mb-db">DB</span> Historial
@@ -196,7 +183,6 @@
     <button class="ep-btn" onclick="goPage('logerrores', this)">
       <span class="mb mb-db">DB</span> Log de errores
     </button>
-
     <p class="sidebar-label">Demostración</p>
     <button class="ep-btn" onclick="goPage('errores', this)">
       <span class="mb" style="background:rgba(239,68,68,0.15);color:var(--red)">ERR</span> Errores HTTP
@@ -204,15 +190,13 @@
   </aside>
 
   <main>
-
-    <!-- ═══ PAGE: cotización individual / todas ═══ -->
     <div class="page active" id="page-todas">
       <h1 class="pg-title" id="epTitle">Todas las divisas</h1>
       <p class="pg-sub" id="epDesc">Consulta la API y guarda en MySQL automáticamente</p>
       <div class="cards-grid" id="metricsRow" style="display:none"></div>
       <div class="url-bar">
         <span class="get-pill">GET</span>
-        <input class="url-input" id="urlInput" value="http://localhost:3000/api/cotizaciones" />
+        <input class="url-input" id="urlInput" value="http://localhost:3000/api/cotizaciones?pais=colombia" />
         <button class="btn-send" id="sendBtn" onclick="sendRequest()">Enviar →</button>
       </div>
       <div class="status-strip" id="statusStrip">
@@ -229,29 +213,23 @@
       <div class="code-panel" id="panelInfo" style="display:none"><pre style="color:var(--text);line-height:2">
 <span style="color:var(--accent2);font-weight:600">FLUJO COMPLETO DE DATOS</span>
 
-  1. Navegador  →  GET http://localhost:3000/api/cotizaciones
-  2. Express    →  GET https://co.dolarapi.com/v1/cotizaciones
+  1. Navegador  →  GET http://localhost:3000/api/cotizaciones?pais=chile
+  2. Express    →  GET https://cl.dolarapi.com/v1/cotizaciones
   3. DolarAPI   →  responde con JSON
   4. Express    →  INSERT INTO cotizaciones (...)  ← guarda en MySQL
   5. Express    →  devuelve el mismo JSON al navegador
 
-<span style="color:var(--accent2);font-weight:600">TABLA EN MYSQL</span>
-  cotizaciones (id, moneda, nombre, compra, venta,
-                ultimo_cierre, fecha_actualizacion,
-                endpoint, http_status, consultado_en)
-
 <span style="color:var(--accent2);font-weight:600">ENDPOINTS DEL BACKEND</span>
-  GET /api/cotizaciones           → todas las divisas
-  GET /api/cotizaciones/:moneda   → una divisa
-  GET /api/historial              → historial BD
-  GET /api/ultimas                → última por moneda
-  GET /api/errores                → log errores BD
-  GET /api/stats                  → estadísticas BD
-  GET /api/demo/error/:code       → error simulado + guardado en BD
+  GET /api/paises                          → lista de países
+  GET /api/cotizaciones?pais=chile         → todas las divisas de Chile
+  GET /api/cotizaciones/dolar?pais=chile   → dólar de Chile
+  GET /api/historial                       → historial BD
+  GET /api/ultimas                         → última por moneda
+  GET /api/errores                         → log errores BD
+  GET /api/stats                           → estadísticas BD
       </pre></div>
     </div>
 
-    <!-- ═══ PAGE: historial ═══ -->
     <div class="page" id="page-historial">
       <h1 class="pg-title">Historial de consultas</h1>
       <p class="pg-sub">Todas las filas guardadas en la tabla <code style="color:var(--accent2)">cotizaciones</code></p>
@@ -264,7 +242,6 @@
       </div>
     </div>
 
-    <!-- ═══ PAGE: últimas ═══ -->
     <div class="page" id="page-ultimas">
       <h1 class="pg-title">Última cotización por moneda</h1>
       <p class="pg-sub">Vista <code style="color:var(--accent2)">ultima_cotizacion</code> en MySQL</p>
@@ -277,7 +254,6 @@
       </div>
     </div>
 
-    <!-- ═══ PAGE: log errores ═══ -->
     <div class="page" id="page-logerrores">
       <h1 class="pg-title">Log de errores HTTP</h1>
       <p class="pg-sub">Tabla <code style="color:var(--accent2)">log_errores</code> en MySQL</p>
@@ -290,7 +266,6 @@
       </div>
     </div>
 
-    <!-- ═══ PAGE: errores HTTP demo ═══ -->
     <div class="page" id="page-errores">
       <h1 class="pg-title">Errores HTTP</h1>
       <p class="pg-sub">Cada clic hace una petición real al backend → guarda en <code style="color:var(--accent2)">log_errores</code></p>
@@ -306,26 +281,57 @@
       <div class="status-strip" id="errStatusStrip" style="display:none"></div>
       <div class="code-panel" id="errPanel"><pre class="c-mut">// Haz clic en un código de error — se guardará en MySQL</pre></div>
     </div>
-
   </main>
 </div>
 
 <script>
 const API = 'http://localhost:3000/api';
+let paisActual = 'colombia';
 
-/* ─── Navegación ─── */
+// ── Página activa en el sidebar (para saber qué moneda reconstruir) ──
+let paginaActual = 'todas';
+
+// ── Mapa moneda → path (sin ?pais) ──
 const PAGES = {
-  todas:      { title:'Todas las divisas',     desc:'Consulta la API y guarda en MySQL automáticamente', url:`${API}/cotizaciones` },
-  dolar:      { title:'Dólar USD',             desc:'USD → COP',  url:`${API}/cotizaciones/dolar` },
-  euro:       { title:'Euro',                  desc:'EUR → COP',  url:`${API}/cotizaciones/euro`  },
-  trm:        { title:'TRM Oficial',           desc:'TRM → COP',  url:`${API}/cotizaciones/trm`   },
-  ars:        { title:'Peso Argentino',        desc:'ARS → COP',  url:`${API}/cotizaciones/ars`   },
-  clp:        { title:'Peso Chileno',          desc:'CLP → COP',  url:`${API}/cotizaciones/clp`   },
-  mxn:        { title:'Peso Mexicano',         desc:'MXN → COP',  url:`${API}/cotizaciones/mxn`   },
-  brl:        { title:'Real Brasileño',        desc:'BRL → COP',  url:`${API}/cotizaciones/brl`   },
-  pen:        { title:'Sol Peruano',           desc:'PEN → COP',  url:`${API}/cotizaciones/pen`   },
+  todas: { title:'Todas las divisas', desc:'Consulta la API y guarda en MySQL automáticamente', path:'cotizaciones' },
+  dolar: { title:'Dólar USD',         desc:'USD', path:'cotizaciones/dolar' },
+  euro:  { title:'Euro',              desc:'EUR', path:'cotizaciones/euro'  },
+  trm:   { title:'TRM Oficial',       desc:'TRM', path:'cotizaciones/trm'   },
+  ars:   { title:'Peso Argentino',    desc:'ARS', path:'cotizaciones/ars'   },
+  clp:   { title:'Peso Chileno',      desc:'CLP', path:'cotizaciones/clp'   },
+  mxn:   { title:'Peso Mexicano',     desc:'MXN', path:'cotizaciones/mxn'   },
+  brl:   { title:'Real Brasileño',    desc:'BRL', path:'cotizaciones/brl'   },
+  pen:   { title:'Sol Peruano',       desc:'PEN', path:'cotizaciones/pen'   },
 };
 const API_PAGES = Object.keys(PAGES);
+
+// ── Construye la URL completa con el país actual ──
+function buildUrl(path) {
+  return `${API}/${path}?pais=${paisActual}`;
+}
+
+// ── Cargar países desde el backend ──
+async function cargarPaises() {
+  try {
+    const data = await fetch(`${API}/paises`).then(r => r.json());
+    const sel = document.getElementById('paisSelect');
+    sel.innerHTML = data.map(p =>
+      `<option value="${p.id}" ${p.id === 'colombia' ? 'selected' : ''}>${p.nombre}</option>`
+    ).join('');
+    paisActual = sel.value;
+    // Actualiza la URL inicial
+    document.getElementById('urlInput').value = buildUrl(PAGES[paginaActual].path);
+  } catch {
+    document.getElementById('paisSelect').innerHTML = '<option value="colombia">Colombia</option>';
+  }
+}
+
+// ── Cuando cambia el país: actualiza paisActual y la URL del input ──
+function onPaisChange() {
+  paisActual = document.getElementById('paisSelect').value;
+  document.getElementById('urlInput').value = buildUrl(PAGES[paginaActual]?.path || 'cotizaciones');
+  resetStatus();
+}
 
 function goPage(name, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -334,11 +340,14 @@ function goPage(name, btn) {
   btn.classList.add('active');
 
   if (API_PAGES.includes(name)) {
+    paginaActual = name;
     const cfg = PAGES[name];
-    document.getElementById('epTitle').textContent  = cfg.title;
-    document.getElementById('epDesc').textContent   = cfg.desc;
-    document.getElementById('urlInput').value       = cfg.url;
+    document.getElementById('epTitle').textContent = cfg.title;
+    document.getElementById('epDesc').textContent  = cfg.desc;
+    document.getElementById('urlInput').value      = buildUrl(cfg.path);  // ← siempre con ?pais=
     document.getElementById('metricsRow').style.display = 'none';
+    showResponse('<pre class="c-mut">// Presiona &quot;Enviar →&quot; para consultar la API y guardar en MySQL</pre>');
+    document.getElementById('panelHeaders').innerHTML = '<pre class="c-mut">// Cabeceras HTTP de la respuesta</pre>';
     resetStatus();
     showPanel('response');
     setActiveTab('response');
@@ -349,14 +358,12 @@ function goPage(name, btn) {
   }
 }
 
-/* ─── Petición principal ─── */
 async function sendRequest() {
   const url = document.getElementById('urlInput').value.trim();
   const btn = document.getElementById('sendBtn');
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Enviando…';
   setStatusLoading();
   showResponse('<pre class="c-mut">// Cargando…</pre>');
-
   const t0 = Date.now();
   try {
     const res  = await fetch(url);
@@ -364,11 +371,9 @@ async function sendRequest() {
     const data = await res.json();
     setStatusCode(res.status, ms, true);
     showResponse(`<pre>${colorJSON(data)}</pre>`);
-
     const hdrs = {};
     res.headers.forEach((v,k) => hdrs[k] = v);
     document.getElementById('panelHeaders').innerHTML = `<pre>${colorJSON(hdrs)}</pre>`;
-
     if (!Array.isArray(data) && data.compra !== undefined) renderMetrics(data);
     else if (Array.isArray(data)) renderArrayMetrics(data);
     else document.getElementById('metricsRow').style.display = 'none';
@@ -379,14 +384,12 @@ async function sendRequest() {
   btn.disabled = false; btn.innerHTML = 'Enviar →';
 }
 
-/* ─── Errores demo ─── */
 async function triggerError(code) {
-  const strip  = document.getElementById('errStatusStrip');
-  const panel  = document.getElementById('errPanel');
+  const strip = document.getElementById('errStatusStrip');
+  const panel = document.getElementById('errPanel');
   strip.style.display = 'flex';
   strip.innerHTML = `<span class="spin"></span><span style="color:var(--muted)">Enviando a backend…</span>`;
   panel.innerHTML = `<pre class="c-mut">// Enviando petición…</pre>`;
-
   const t0 = Date.now();
   try {
     const res  = await fetch(`${API}/demo/error/${code}`);
@@ -405,8 +408,7 @@ async function triggerError(code) {
   }
 }
 
-/* ─── Tablas de BD ─── */
-const fmtCOP = n => n != null ? '$' + Number(n).toLocaleString('es-CO') : '—';
+const fmtCOP  = n => n != null ? '$' + Number(n).toLocaleString('es-CO') : '—';
 const fmtDate = d => d ? new Date(d).toLocaleString('es-CO') : '—';
 const pillStatus = s => {
   const cls = s === 200 ? 'pill-ok' : s >= 500 ? 'pill-err' : 'pill-warn';
@@ -419,19 +421,15 @@ async function loadHistorial() {
   try {
     const data = await fetch(`${API}/historial?limit=80`).then(r=>r.json());
     if (!data.length) { tb.innerHTML = `<tr><td colspan="7" style="color:var(--muted);padding:1.5rem;text-align:center">Sin datos — haz una consulta primero</td></tr>`; return; }
-    tb.innerHTML = data.map(r => `
-      <tr>
-        <td>${r.id}</td>
-        <td><strong>${r.moneda}</strong></td>
-        <td style="color:var(--green)">${fmtCOP(r.compra)}</td>
-        <td style="color:var(--amber)">${fmtCOP(r.venta)}</td>
-        <td style="color:var(--muted);font-size:0.7rem">${r.endpoint}</td>
-        <td>${pillStatus(r.http_status)}</td>
-        <td style="color:var(--muted);font-size:0.7rem">${fmtDate(r.consultado_en)}</td>
-      </tr>`).join('');
-  } catch(e) {
-    tb.innerHTML = `<tr><td colspan="7" style="color:var(--red);padding:1.5rem;text-align:center">Error de red — ¿corre node server.js?</td></tr>`;
-  }
+    tb.innerHTML = data.map(r => `<tr>
+      <td>${r.id}</td><td><strong>${r.moneda}</strong></td>
+      <td style="color:var(--green)">${fmtCOP(r.compra)}</td>
+      <td style="color:var(--amber)">${fmtCOP(r.venta)}</td>
+      <td style="color:var(--muted);font-size:0.7rem">${r.endpoint}</td>
+      <td>${pillStatus(r.http_status)}</td>
+      <td style="color:var(--muted);font-size:0.7rem">${fmtDate(r.consultado_en)}</td>
+    </tr>`).join('');
+  } catch { tb.innerHTML = `<tr><td colspan="7" style="color:var(--red);padding:1.5rem;text-align:center">Error de red — ¿corre node server.js?</td></tr>`; }
 }
 
 async function loadUltimas() {
@@ -440,18 +438,14 @@ async function loadUltimas() {
   try {
     const data = await fetch(`${API}/ultimas`).then(r=>r.json());
     if (!data.length) { tb.innerHTML = `<tr><td colspan="6" style="color:var(--muted);padding:1.5rem;text-align:center">Sin datos aún</td></tr>`; return; }
-    tb.innerHTML = data.map(r => `
-      <tr>
-        <td><strong>${r.moneda}</strong></td>
-        <td>${r.nombre}</td>
-        <td style="color:var(--green)">${fmtCOP(r.compra)}</td>
-        <td style="color:var(--amber)">${fmtCOP(r.venta)}</td>
-        <td>${fmtCOP(r.ultimo_cierre)}</td>
-        <td style="color:var(--muted);font-size:0.7rem">${fmtDate(r.fecha_actualizacion)}</td>
-      </tr>`).join('');
-  } catch(e) {
-    tb.innerHTML = `<tr><td colspan="6" style="color:var(--red);padding:1.5rem;text-align:center">Error de red</td></tr>`;
-  }
+    tb.innerHTML = data.map(r => `<tr>
+      <td><strong>${r.moneda}</strong></td><td>${r.nombre}</td>
+      <td style="color:var(--green)">${fmtCOP(r.compra)}</td>
+      <td style="color:var(--amber)">${fmtCOP(r.venta)}</td>
+      <td>${fmtCOP(r.ultimo_cierre)}</td>
+      <td style="color:var(--muted);font-size:0.7rem">${fmtDate(r.fecha_actualizacion)}</td>
+    </tr>`).join('');
+  } catch { tb.innerHTML = `<tr><td colspan="6" style="color:var(--red);padding:1.5rem;text-align:center">Error de red</td></tr>`; }
 }
 
 async function loadLogErrores() {
@@ -460,20 +454,16 @@ async function loadLogErrores() {
   try {
     const data = await fetch(`${API}/errores`).then(r=>r.json());
     if (!data.length) { tb.innerHTML = `<tr><td colspan="5" style="color:var(--muted);padding:1.5rem;text-align:center">Sin errores registrados</td></tr>`; return; }
-    tb.innerHTML = data.map(r => `
-      <tr>
-        <td>${r.id}</td>
-        <td style="color:var(--muted);font-size:0.7rem">${r.endpoint}</td>
-        <td>${pillStatus(r.http_status)}</td>
-        <td style="font-size:0.72rem">${r.mensaje||'—'}</td>
-        <td style="color:var(--muted);font-size:0.7rem">${fmtDate(r.ocurrido_en)}</td>
-      </tr>`).join('');
-  } catch(e) {
-    tb.innerHTML = `<tr><td colspan="5" style="color:var(--red);padding:1.5rem;text-align:center">Error de red</td></tr>`;
-  }
+    tb.innerHTML = data.map(r => `<tr>
+      <td>${r.id}</td>
+      <td style="color:var(--muted);font-size:0.7rem">${r.endpoint}</td>
+      <td>${pillStatus(r.http_status)}</td>
+      <td style="font-size:0.72rem">${r.mensaje||'—'}</td>
+      <td style="color:var(--muted);font-size:0.7rem">${fmtDate(r.ocurrido_en)}</td>
+    </tr>`).join('');
+  } catch { tb.innerHTML = `<tr><td colspan="5" style="color:var(--red);padding:1.5rem;text-align:center">Error de red</td></tr>`; }
 }
 
-/* ─── Métricas ─── */
 function renderMetrics(d) {
   const row = document.getElementById('metricsRow');
   row.style.display = 'grid';
@@ -481,21 +471,22 @@ function renderMetrics(d) {
   const hora = d.fechaActualizacion ? new Date(d.fechaActualizacion).toLocaleTimeString('es-CO') : '—';
   row.innerHTML = `
     <div class="mc"><div class="mc-label">moneda</div><div class="mc-val">${d.moneda||'—'}</div><div class="mc-sub">${d.nombre||''}</div></div>
-    <div class="mc"><div class="mc-label">compra</div><div class="mc-val" style="color:var(--green)">${fmt(d.compra)}</div><div class="mc-sub">COP</div></div>
-    <div class="mc"><div class="mc-label">venta</div><div class="mc-val" style="color:var(--amber)">${fmt(d.venta)}</div><div class="mc-sub">COP</div></div>
-    <div class="mc"><div class="mc-label">ú. cierre</div><div class="mc-val">${fmt(d.ultimoCierre)}</div><div class="mc-sub">COP</div></div>
+    <div class="mc"><div class="mc-label">compra</div><div class="mc-val" style="color:var(--green)">${fmt(d.compra)}</div><div class="mc-sub">local</div></div>
+    <div class="mc"><div class="mc-label">venta</div><div class="mc-val" style="color:var(--amber)">${fmt(d.venta)}</div><div class="mc-sub">local</div></div>
+    <div class="mc"><div class="mc-label">ú. cierre</div><div class="mc-val">${fmt(d.ultimoCierre)}</div><div class="mc-sub">local</div></div>
     <div class="mc"><div class="mc-label">guardado en</div><div class="mc-val" style="color:var(--green);font-size:0.85rem">MySQL ✓</div><div class="mc-sub">${hora}</div></div>`;
 }
+
 function renderArrayMetrics(data) {
   const row = document.getElementById('metricsRow');
   row.style.display = 'grid';
   row.innerHTML = `
+    <div class="mc"><div class="mc-label">país</div><div class="mc-val" style="font-size:0.9rem">${paisActual}</div><div class="mc-sub">seleccionado</div></div>
     <div class="mc"><div class="mc-label">divisas</div><div class="mc-val">${data.length}</div><div class="mc-sub">recibidas</div></div>
     <div class="mc"><div class="mc-label">guardadas</div><div class="mc-val" style="color:var(--green)">${data.length}</div><div class="mc-sub">en MySQL</div></div>
     <div class="mc"><div class="mc-label">formato</div><div class="mc-val" style="font-size:0.9rem">JSON</div><div class="mc-sub">application/json</div></div>`;
 }
 
-/* ─── Helpers de UI ─── */
 function colorJSON(json) {
   return JSON.stringify(json,null,2)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -531,18 +522,15 @@ function setStatusCode(code, ms, saved) {
   const txt = code===200?'OK':code<500?'Client Error':'Server Error';
   const savedBadge = saved && code===200 ? `<span class="s-saved">✓ guardado en MySQL</span>` : '';
   document.getElementById('statusStrip').innerHTML=`
-    <span class="sdot sdot-${cls}"></span>
-    <span class="sc-${cls}">${code} ${txt}</span>
-    ${savedBadge}
-    <span class="s-time">${ms}ms</span>`;
+    <span class="sdot sdot-${cls}"></span><span class="sc-${cls}">${code} ${txt}</span>
+    ${savedBadge}<span class="s-time">${ms}ms</span>`;
 }
 function setStatusError(ms) {
   document.getElementById('statusStrip').innerHTML=`<span class="sdot sdot-err"></span><span class="sc-err">Error de red</span><span class="s-time">${ms}ms</span>`;
 }
 
-/* ─── Status del servidor ─── */
 async function checkServer() {
-  const dot   = document.getElementById('ssDot');
+  const dot = document.getElementById('ssDot');
   const label = document.getElementById('ssLabel');
   try {
     const res = await fetch(`${API}/stats`);
@@ -560,6 +548,7 @@ async function checkServer() {
   }
 }
 
+cargarPaises();
 checkServer();
 setInterval(checkServer, 15000);
 </script>
