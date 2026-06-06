@@ -45,3 +45,48 @@ CREATE OR REPLACE VIEW ultima_cotizacion AS
 -- Datos de prueba (opcionales, se pueden borrar)
 -- INSERT INTO cotizaciones (moneda, nombre, compra, venta, ultimo_cierre, fecha_actualizacion, endpoint, http_status)
 -- VALUES ('USD','Dólar',4100.00,4120.00,4095.00,'2024-01-01 12:00:00','/v1/cotizaciones/dolar',200);
+
+-- ==========================================
+-- ACTUALIZACIÓN DOLARAPI MULTI-PAÍS
+-- Ejecutar sobre la BD existente
+-- ==========================================
+
+USE dolarapi_db;
+
+-- 1. Agregar columna pais a cotizaciones
+ALTER TABLE cotizaciones
+ADD COLUMN pais VARCHAR(50) NULL DEFAULT NULL;
+
+-- 2. Agregar columna pais a log_errores
+ALTER TABLE log_errores
+ADD COLUMN pais VARCHAR(50) NULL;
+
+-- 3. Actualizar registros existentes
+UPDATE cotizaciones
+SET pais = 'colombia'
+WHERE pais IS NULL;
+
+UPDATE log_errores
+SET pais = 'colombia'
+WHERE pais IS NULL;
+
+-- 4. Recrear vista para soportar múltiples países
+DROP VIEW IF EXISTS ultima_cotizacion;
+
+CREATE VIEW ultima_cotizacion AS
+SELECT c1.*
+FROM cotizaciones c1
+WHERE c1.consultado_en = (
+SELECT MAX(c2.consultado_en)
+FROM cotizaciones c2
+WHERE c2.moneda = c1.moneda
+AND c2.pais = c1.pais
+);
+
+-- 5. Índices recomendados
+CREATE INDEX idx_pais ON cotizaciones(pais);
+CREATE INDEX idx_moneda ON cotizaciones(moneda);
+CREATE INDEX idx_consultado_en ON cotizaciones(consultado_en);
+
+CREATE INDEX idx_error_pais ON log_errores(pais);
+CREATE INDEX idx_error_fecha ON log_errores(ocurrido_en);
